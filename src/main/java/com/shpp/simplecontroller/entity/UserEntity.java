@@ -1,6 +1,9 @@
 package com.shpp.simplecontroller.entity;
 
+import com.shpp.simplecontroller.validation.IPN;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "users")
@@ -8,10 +11,13 @@ public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @PositiveOrZero
     private Long id;
 
+    @Size(min = 3, max = 25)
     private String name;
 
+    @IPN
     private Long ipn;
 
     public UserEntity(){}
