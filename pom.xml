@@ -10,12 +10,13 @@
     </parent>
     <groupId>com.shpp</groupId>
     <artifactId>SimpleController</artifactId>
-    <version>${application.version}</version>
+    <version>1.1.1</version>
     <name>SimpleController</name>
     <description>SimpleController</description>
     <properties>
-        <java.version>21</java.version>
+        <java.version>17</java.version>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
