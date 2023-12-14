@@ -9,20 +9,29 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.List;
+
 @Configuration
 public class SwaggerConfig {
 
-    @Value("${application.openapi.url}")
-    private String url;
+    @Value("${application.openapi.dev-url}")
+    private String devUrl;
+
+    @Value("${application.openapi.prod-url}")
+    private String prodUrl;
 
     @Value("${application.version}")
     private String version;
 
     @Bean
     public OpenAPI openApiInformation() {
-        Server localServer = new Server()
-                .url(url)
-                .description("Localhost Server URL");
+        Server devServer = new Server();
+        devServer.setUrl(devUrl);
+        devServer.setDescription("Server URL in Development environment");
+
+        Server prodServer = new Server();
+        prodServer.setUrl(prodUrl);
+        prodServer.setDescription("Server URL in Production environment");
 
         Contact contact = new Contact()
                 .email("zlatnikovyevgeniy@gmail.com")
@@ -35,7 +44,7 @@ public class SwaggerConfig {
                 .version(version)
                 .license(new License().name("Apache 2.0").url("http://springdoc.org"));
 
-        return new OpenAPI().info(info).addServersItem(localServer);
+        return new OpenAPI().info(info).servers(List.of(devServer, prodServer));
     }
 
 }

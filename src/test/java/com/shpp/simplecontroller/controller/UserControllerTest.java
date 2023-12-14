@@ -58,7 +58,7 @@ class UserControllerTest {
     @Test
     void updateUserTest() {
         Mockito.when(userService.updateUserInfo(any(UserEntity.class))).thenReturn(new UserEntity());
-        userController.updateUser(new UserDTO());
+        userController.updateUser(1L,new UserDTO(1L,"name",1234567899L));
         Mockito.verify(modelMapper,Mockito.times(1))
                 .map(any(), eq(UserDTO.class));
         Mockito.verify(modelMapper,Mockito.times(1))

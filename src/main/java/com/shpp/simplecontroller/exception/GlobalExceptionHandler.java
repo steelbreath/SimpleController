@@ -1,5 +1,6 @@
 package com.shpp.simplecontroller.exception;
 
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -16,6 +17,16 @@ public class GlobalExceptionHandler {
     public ErrorMessage handleUserNotFoundException(UserNotFoundException ex, WebRequest request) {
         return new ErrorMessage(
                 HttpStatus.NOT_FOUND.value(),
+                LocalDateTime.now(),
+                ex.getMessage(),
+                request.getDescription(false));
+    }
+
+    @ExceptionHandler({ConstraintViolationException.class})
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ErrorMessage handleConstraintViolationException(ConstraintViolationException ex, WebRequest request) {
+        return new ErrorMessage(
+                HttpStatus.BAD_REQUEST.value(),
                 LocalDateTime.now(),
                 ex.getMessage(),
                 request.getDescription(false));

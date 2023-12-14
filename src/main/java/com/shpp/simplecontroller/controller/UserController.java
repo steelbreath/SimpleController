@@ -3,6 +3,7 @@ package com.shpp.simplecontroller.controller;
 import com.shpp.simplecontroller.dto.UserDTO;
 import com.shpp.simplecontroller.entity.UserEntity;
 import com.shpp.simplecontroller.exception.ErrorMessage;
+import com.shpp.simplecontroller.exception.UserNotFoundException;
 import com.shpp.simplecontroller.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -10,7 +11,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,12 +24,10 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/users", produces = "application/json")
 public class UserController {
 
-    @Autowired
     public UserService userService;
-
-    @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
     public UserController(UserService userService, ModelMapper modelMapper) {
         this.userService = userService;
         this.modelMapper = modelMapper;
@@ -55,8 +53,8 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "OK", content = { @Content(schema = @Schema(implementation = UserDTO.class), mediaType = "application/json") }),
             @ApiResponse(responseCode = "404", description = "User Not Found", content = { @Content(schema = @Schema(implementation =  ErrorMessage.class), mediaType = "application/json") }),
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = { @Content(schema = @Schema()) }) })
-    @DeleteMapping
-    public void deleteUser(Long id){
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable Long id){
         userService.deleteUser(id);
     }
 
@@ -66,7 +64,7 @@ public class UserController {
             description = "Creates User object and add it to database. The response is created UserDTO object with id, name and ipn.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK", content = { @Content(schema = @Schema(implementation = UserDTO.class), mediaType = "application/json") }),
-            @ApiResponse(responseCode = "400", description = "Bad Request", content = { @Content(schema = @Schema()) }),
+            @ApiResponse(responseCode = "400", description = "Bad Request", content = { @Content(schema = @Schema(implementation =  ErrorMessage.class), mediaType = "application/json") }),
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = { @Content(schema = @Schema()) }) })
     @PostMapping
     public ResponseEntity<UserDTO> addUser(UserDTO userDTO){
@@ -95,11 +93,12 @@ public class UserController {
             description = "Update User object information in database. The response is updated UserDTO object with id, name and ipn.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK", content = { @Content(schema = @Schema(implementation = UserDTO.class), mediaType = "application/json") }),
-            @ApiResponse(responseCode = "400", description = "Bad Request", content = { @Content(schema = @Schema()) }),
+            @ApiResponse(responseCode = "400", description = "Bad Request", content = { @Content(schema = @Schema(implementation =  ErrorMessage.class), mediaType = "application/json") }),
             @ApiResponse(responseCode = "404", description = "User Not Found", content = { @Content(schema = @Schema(implementation =  ErrorMessage.class), mediaType = "application/json") }),
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = { @Content(schema = @Schema()) })})
-    @PutMapping
-    public ResponseEntity<UserDTO> updateUser(UserDTO userDTO){
+    @PutMapping("/{id}")
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, UserDTO userDTO){
+        if(!id.equals(userDTO.getId())) throw new UserNotFoundException("You con not modify User id!");
         UserEntity userEntity = modelMapper.map(userDTO,UserEntity.class);
         UserDTO updatedUser = modelMapper.map(userService.updateUserInfo(userEntity),UserDTO.class);
         return ResponseEntity.ok(updatedUser);
