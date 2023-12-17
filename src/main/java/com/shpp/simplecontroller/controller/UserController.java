@@ -68,9 +68,9 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = {@Content(schema = @Schema())})})
     @PostMapping
     public ResponseEntity<UserDTO> addUser(@Valid @RequestBody UserDTO userDTO, BindingResult result) {
-        userDTO = (UserDTO) result.getTarget();
-        if (userDTO.getName().length() < 3 || userDTO.getName().length() > 25) {
+        if (result.hasErrors()) {
             userDTO.setName("username");
+            userDTO.setIpn(1234567899L);
         }
         UserEntity userEntity = modelMapper.map(userDTO, UserEntity.class);
         UserDTO createdUser = modelMapper.map(userService.addUser(userEntity), UserDTO.class);
@@ -101,7 +101,12 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "User Not Found", content = {@Content(schema = @Schema(implementation = ErrorMessage.class), mediaType = "application/json")}),
             @ApiResponse(responseCode = "500", description = "Internal Server Error", content = {@Content(schema = @Schema())})})
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @Valid @RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id,
+                                              @Valid @RequestBody UserDTO userDTO, BindingResult result) {
+        if (result.hasErrors()) {
+            userDTO.setName("username");
+            userDTO.setIpn(1234567899L);
+        }
         UserEntity userEntity = modelMapper.map(userDTO, UserEntity.class);
         UserDTO updatedUser = modelMapper.map(userService.updateUserInfo(id, userEntity), UserDTO.class);
         return ResponseEntity.ok(updatedUser);

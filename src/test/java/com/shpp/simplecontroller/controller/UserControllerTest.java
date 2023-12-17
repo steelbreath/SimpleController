@@ -3,11 +3,11 @@ package com.shpp.simplecontroller.controller;
 import com.shpp.simplecontroller.dto.UserDTO;
 import com.shpp.simplecontroller.entity.UserEntity;
 import com.shpp.simplecontroller.service.IUserService;
-import com.shpp.simplecontroller.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.modelmapper.ModelMapper;
+import org.springframework.validation.BindingResult;
 
 import java.util.List;
 
@@ -36,8 +36,9 @@ class UserControllerTest {
 
     @Test
     void addUserTest() {
+        BindingResult result = Mockito.mock(BindingResult.class);
         Mockito.when(userService.addUser(any(UserEntity.class))).thenReturn(new UserEntity());
-        userController.addUser(new UserDTO());
+        userController.addUser(new UserDTO("q",1234567899L),result);
         Mockito.verify(modelMapper,Mockito.times(1))
                 .map(any(), eq(UserDTO.class));
         Mockito.verify(modelMapper,Mockito.times(1))
@@ -56,8 +57,9 @@ class UserControllerTest {
 
     @Test
     void updateUserTest() {
+        BindingResult result = Mockito.mock(BindingResult.class);
         Mockito.when(userService.updateUserInfo(anyLong(),any(UserEntity.class))).thenReturn(new UserEntity());
-        userController.updateUser(1L,new UserDTO());
+        userController.updateUser(1L,new UserDTO("q",1234567899L), result);
         Mockito.verify(modelMapper,Mockito.times(1))
                 .map(any(), eq(UserDTO.class));
         Mockito.verify(modelMapper,Mockito.times(1))
