@@ -18,7 +18,7 @@ class UserServiceTest {
 
     private UserRepository userRepository;
 
-    private UserService userService;
+    private IUserService userService;
 
     @BeforeEach
     void setUp() {
@@ -51,7 +51,7 @@ class UserServiceTest {
         UserEntity userEntity = new UserEntity(id, "Nana", 1234567899L);
         UserEntity updatedUser = new UserEntity(id, "Pasha", 1234567899L);
         Mockito.when(userRepository.findById(id)).thenReturn(Optional.of(userEntity));
-        userService.updateUserInfo(updatedUser);
+        userService.updateUserInfo(id, updatedUser);
         Mockito.verify(userRepository, Mockito.times(1)).save(argCapt.capture());
         Assertions.assertEquals(updatedUser, argCapt.getValue());
     }
@@ -59,7 +59,8 @@ class UserServiceTest {
     @Test
     void updateUserInfoNegativeTest() {
         UserEntity updatedUser = new UserEntity(6L, "Pasha", 1234567899L);
-        Assertions.assertThrows(UserNotFoundException.class, () -> userService.updateUserInfo(updatedUser));
+        Assertions.assertThrows(UserNotFoundException.class, () -> userService
+                .updateUserInfo(updatedUser.getId(), updatedUser));
     }
 
     @Test

@@ -11,7 +11,7 @@ public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @PositiveOrZero
+    @PositiveOrZero(message = "Id must be positive or zero!")
     private Long id;
 
     @Size(min = 3, max = 25)

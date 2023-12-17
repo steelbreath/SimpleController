@@ -7,9 +7,6 @@ import jakarta.validation.constraints.Size;
 
 public class UserDTO {
 
-    @PositiveOrZero
-    private Long id;
-
     @Size(min = 3, max = 25)
     private String name;
 
@@ -19,18 +16,9 @@ public class UserDTO {
     public UserDTO() {
     }
 
-    public UserDTO(Long id, String name, Long ipn) {
-        this.id = id;
+    public UserDTO(String name, Long ipn) {
         this.name = name;
         this.ipn = ipn;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getName() {

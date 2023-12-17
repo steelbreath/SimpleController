@@ -11,7 +11,7 @@ public interface IUserService {
 
     UserEntity addUser(UserEntity userEntity);
 
-    UserEntity updateUserInfo(UserEntity userEntity);
+    UserEntity updateUserInfo(Long id, UserEntity userEntity);
 
     void deleteUser(Long id);
 

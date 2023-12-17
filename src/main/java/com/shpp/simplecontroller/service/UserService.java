@@ -31,15 +31,19 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserEntity updateUserInfo(@Valid UserEntity userEntity) {
-        Optional<UserEntity> user = userRepository.findById(userEntity.getId());
-        if (user.isEmpty()) throw new UserNotFoundException("There no user with such id.");
+    public UserEntity updateUserInfo(Long id, @Valid UserEntity userEntity) {
+        Optional<UserEntity> user = userRepository.findById(id);
+        if (user.isEmpty()) {
+            throw new UserNotFoundException("There no user with such id.");
+        }
         return userRepository.save(userEntity);
     }
 
     @Override
     public void deleteUser(Long id) {
-        if(userRepository.findById(id).isEmpty()) throw new UserNotFoundException("There no user with such id.");
+        if(userRepository.findById(id).isEmpty()) {
+            throw new UserNotFoundException("There no user with such id.");
+        }
         userRepository.deleteById(id);
     }
 

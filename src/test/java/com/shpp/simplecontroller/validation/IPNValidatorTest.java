@@ -1,8 +1,5 @@
 package com.shpp.simplecontroller.validation;
 
-import com.shpp.simplecontroller.dto.UserDTO;
-import com.shpp.simplecontroller.repository.UserRepository;
-import com.shpp.simplecontroller.service.UserService;
 import jakarta.validation.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,13 +8,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.util.Set;
 import java.util.stream.Stream;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class IPNValidatorTest {
 
